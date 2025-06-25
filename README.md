@@ -1,5 +1,11 @@
 # Cara menjalankan API
 
+## Environment Configuration
+
+1. Duplikat file .env.example
+2. Rename menjadi .env
+3. Sesuaikan konfigurasi dengan PostgreSQL yang terinstal
+
 ## Get Packages
 
 ```
