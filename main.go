@@ -42,6 +42,8 @@ func main() {
 		protected.PUT("/:id", h.UpdateBook)
 		protected.DELETE("/:id", h.DeleteBook)
 		protected.POST("/:id/cover", h.UploadCover)
+		protected.GET("/search", h.SearchBooks)
+
 	}
 
 	// Static file server

@@ -130,3 +130,19 @@ func (h *BookHandler) UploadCover(c *gin.Context) {
 		"cover_image": book.CoverImage,
 	})
 }
+
+func (h *BookHandler) SearchBooks(c *gin.Context) {
+	keyword := c.Query("q")
+	if keyword == "" {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Query pencarian tidak boleh kosong"})
+		return
+	}
+
+	books, err := h.Repo.Search(keyword)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+
+	c.JSON(http.StatusOK, books)
+}

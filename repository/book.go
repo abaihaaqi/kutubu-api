@@ -12,6 +12,7 @@ type BookRepository interface {
 	Create(book *model.Book) error
 	Update(book *model.Book) error
 	Delete(book *model.Book) error
+	Search(keyword string) ([]model.Book, error)
 }
 
 type bookRepository struct {
@@ -44,4 +45,11 @@ func (r *bookRepository) Update(book *model.Book) error {
 
 func (r *bookRepository) Delete(book *model.Book) error {
 	return r.db.Delete(book).Error
+}
+
+func (r *bookRepository) Search(keyword string) ([]model.Book, error) {
+	var books []model.Book
+	query := "%" + keyword + "%"
+	err := r.db.Where("title ILIKE ? OR author ILIKE ?", query, query).Find(&books).Error
+	return books, err
 }
