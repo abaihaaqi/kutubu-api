@@ -41,7 +41,6 @@ func main() {
 		protected.POST("", h.CreateBook)
 		protected.PUT("/:id", h.UpdateBook)
 		protected.DELETE("/:id", h.DeleteBook)
-		protected.POST("/:id/cover", h.UploadCover)
 		protected.GET("/search", h.SearchBooks)
 
 	}

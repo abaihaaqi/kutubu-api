@@ -9,4 +9,5 @@ type Book struct {
 	Year       int    `json:"year"`
 	Category   string `json:"category"`
 	CoverImage string `json:"cover_image"`
+	UserID     uint   `json:"user_id"`
 }

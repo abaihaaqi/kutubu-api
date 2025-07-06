@@ -7,12 +7,12 @@ import (
 )
 
 type BookRepository interface {
-	GetAll() ([]model.Book, error)
-	GetByID(id uint) (*model.Book, error)
+	GetAll(userID uint) ([]model.Book, error)
+	GetByID(id uint, userID uint) (*model.Book, error)
 	Create(book *model.Book) error
 	Update(book *model.Book) error
 	Delete(book *model.Book) error
-	Search(keyword string) ([]model.Book, error)
+	Search(keyword string, userID uint) ([]model.Book, error)
 }
 
 type bookRepository struct {
@@ -23,15 +23,15 @@ func NewBookRepository(db *gorm.DB) BookRepository {
 	return &bookRepository{db}
 }
 
-func (r *bookRepository) GetAll() ([]model.Book, error) {
+func (r *bookRepository) GetAll(userID uint) ([]model.Book, error) {
 	var books []model.Book
-	err := r.db.Find(&books).Error
+	err := r.db.Where("user_id = ?", userID).Find(&books).Error
 	return books, err
 }
 
-func (r *bookRepository) GetByID(id uint) (*model.Book, error) {
+func (r *bookRepository) GetByID(id uint, userID uint) (*model.Book, error) {
 	var book model.Book
-	err := r.db.First(&book, id).Error
+	err := r.db.Where("user_id = ?", userID).First(&book, id).Error
 	return &book, err
 }
 
@@ -47,9 +47,9 @@ func (r *bookRepository) Delete(book *model.Book) error {
 	return r.db.Delete(book).Error
 }
 
-func (r *bookRepository) Search(keyword string) ([]model.Book, error) {
+func (r *bookRepository) Search(keyword string, userID uint) ([]model.Book, error) {
 	var books []model.Book
 	query := "%" + keyword + "%"
-	err := r.db.Where("title ILIKE ? OR author ILIKE ?", query, query).Find(&books).Error
+	err := r.db.Where("(user_id = ?) AND (title ILIKE ? OR author ILIKE ?)", userID, query, query).Find(&books).Error
 	return books, err
 }

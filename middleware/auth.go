@@ -32,6 +32,16 @@ func AuthMiddleware() gin.HandlerFunc {
 			return
 		}
 
+		// Ambil claims dan user_id
+		if claims, ok := token.Claims.(jwt.MapClaims); ok && token.Valid {
+			if userID, ok := claims["user_id"].(float64); ok {
+				c.Set("user_id", userID) // Simpan user_id ke context
+			} else {
+				c.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{"error": "user_id tidak ditemukan di token"})
+				return
+			}
+		}
+
 		c.Next()
 	}
 }

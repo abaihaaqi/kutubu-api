@@ -71,3 +71,22 @@ func Login(c *gin.Context) {
 
 	c.JSON(http.StatusOK, gin.H{"token": tokenString})
 }
+
+func GetUserID(c *gin.Context) uint {
+	userIDValue, exists := c.Get("user_id")
+
+	if !exists {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "User ID tidak tersedia"})
+		return 0
+	}
+
+	var userID uint
+
+	if intVal, ok := userIDValue.(float64); ok {
+		userID = uint(intVal)
+	} else {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Value is not an float64 or assertion failed."})
+	}
+
+	return userID
+}
